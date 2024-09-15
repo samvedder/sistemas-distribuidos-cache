@@ -220,3 +220,6 @@ Escenarios
 # Conclusión
 
 Este sistema de caché distribuido permite mejorar el rendimiento de las consultas DNS mediante el uso de Redis para almacenar en caché las respuestas más frecuentes y gRPC para la comunicación con un servidor externo cuando las respuestas no están en caché. La arquitectura modular facilita su despliegue y análisis en distintos entornos.
+
+# Vidio
+[Demostracion](https://www.youtube.com/watch?v=BMgl2t5ovKs)
