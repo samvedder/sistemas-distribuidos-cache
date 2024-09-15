@@ -110,7 +110,7 @@ python3 main.py
 ```
 Te pedira la cantidad de paquetes a enviar y lo que debes de limitar la db para tener una distribucion especifica.
 
-## 5. Imagenes y resultados
+## 6. Imagenes y resultados
 
 El script de traffic/main.py al terminar proporciona datos relevantes para realizar un estudio, es por esto que debes de extraer las imagenes del contenedor <traffic> para poder verlas en tu directorio home (como ejemplo)
 ```
@@ -206,7 +206,7 @@ def get_redis_client(key: str):
 ```
 
 Y en los otros 3 archivos solo se deben de comentar la cantidad de redis con los que se quieren trabajar.
-También se implementan políticas de remoción para gestionar el uso de memoria en Redis.
+También se implementan políticas de remoción para gestionar el uso de memoria en Redis (revisar redis.conf para adaptar la memoria y tipo de política de remocion).
 
 Escenarios
 
