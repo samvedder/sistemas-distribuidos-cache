@@ -1,0 +1,29 @@
+# docker-compose.api.yml
+version: '3.8'
+
+networks:
+  app-network:
+    external: false
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis1
+      - redis2
+      - redis3
+      - redis4
+      - redis5
+      - redis6
+      - redis7
+      - redis8
+      - postgresql
+      - grpc-server
+    networks:
+      - app-network

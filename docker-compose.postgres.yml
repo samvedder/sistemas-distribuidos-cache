@@ -1,0 +1,26 @@
+# docker-compose.postgres.yml
+version: '3.8'
+
+networks:
+  app-network:
+    external: false
+
+services:
+  postgresql:
+    image: postgres:bookworm
+    container_name: pgdb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: domains
+    restart: always
+    ports:
+      - "5454:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+volumes:
+  db_data: {}

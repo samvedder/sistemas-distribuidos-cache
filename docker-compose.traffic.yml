@@ -1,0 +1,29 @@
+# docker-compose.traffic.yml
+version: '3.8'
+
+networks:
+  app-network:
+    external: false
+
+services:
+  traffic:
+    build:
+      context: ./traffic
+      dockerfile: Dockerfile
+    container_name: traffic
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis1
+      - redis2
+      - redis3
+      - redis4
+      - redis5
+      - redis6
+      - redis7
+      - redis8
+      - postgresql
+      - api
+    networks:
+      - app-network
