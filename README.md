@@ -30,17 +30,10 @@ DOCKER
  | |-requirements.txt
  | |-Dockerfile
  | |-main.py
- |-grpc-client
- | |-proto
- | | |-service.proto
- | |-requirements.txt
- | |-Dockerfile
- | |-main.py
  |-redis.conf
  |-docker-compose.traffic.yml
  |-docker-compose.postgres.yml
  |-traffic
- | |-analyzer.py
  | |-requirements.txt
  | |-Dockerfile
  | |-main.py
@@ -85,21 +78,25 @@ Primero, clona el repositorio en tu máquina local:
 git clone https://github.com/samvedder/sistemas-distribuidos-cache.git
 cd sistemas-distribuidos-cache
 ```
+## 2. Descargar los datos para poder simular el trafico
 
-## 2. Levantar los contenedores con Docker Compose
+Se debe de descargar de este [link](https://www.kaggle.com/datasets/domainsindex/secondlevel-domains-listzone-file) el archivo comprimido '3rd_lev_domains.csv'
+el cual se debe dejar dentro de la carpeta ../db.init/ para poder levantar el proyecto, **si no esta este archivo y se levantan los contenedores, ocurrira un error.**
+
+## 3. Levantar los contenedores con Docker Compose
 
 El proyecto utiliza Docker Compose para orquestar varios servicios, incluidos Redis, gRPC, PostgreSQL y la API de FastAPI. Puedes levantar todos los servicios necesarios ejecutando los siguientes comandos:
 ```bash
 sudo docker-compose -f docker-compose.network.yml -f docker-compose.postgres.yml -f docker-compose.redis.yml -f docker-compose.api.yml -f docker-compose.traffic.yml -f docker-compose.grpc-server.yml up --build
 ```
 
-## 3. Verificar la API
+## 4. Verificar la API
 
 Una vez que todos los servicios estén en funcionamiento, puedes interactuar con la API a través de las rutas proporcionadas. Por ejemplo, para agregar un dominio al caché, puedes hacer una solicitud POST:
 ```bash
 curl -X POST "http://localhost:8000/text" -H "Content-Type: application/json" -d '{"text":"www.example.com"}'
 ```
-## 4. Generador de Tráfico y Análisis
+## 5. Generador de Tráfico y Análisis
 
 El generador de tráfico (traffic/main.py) puede simular consultas a la API. Este genera estadísticas sobre el rendimiento del sistema, incluyendo la tasa de HIT y MISS en Redis, además de los tiempos de respuesta.
 
@@ -125,23 +122,23 @@ sudo docker cp <id_contenedor_traffic>:/app/redis_hits_misses.png /home/
 # Pruebas y Escenarios
 
 Como se solicita probar el sistema bajo diferentes escenarios. Para ello, puedes se modificar el número de particiones en Redis y observar el impacto en las tasas de HIT y MISS. Hay que seguir una serie de pasos para asegurar los cambios.
-## Primero
+## -Primero
 Se deben de detener los contenedores:
 ```
 sudo docker-compose -f docker-compose.network.yml -f docker-compose.postgres.yml -f docker-compose.redis.yml -f docker-compose.api.yml -f docker-compose.traffic.yml -f docker-compose.grpc-server.yml down
 ```
-## Segundo
+## -Segundo
 Eliminar los volumenes de redis para limpiar el cache:
 ```
 sudo docker-compose -f docker-compose.redis.yml down -v
 ```
-## Tercero
+## -Tercero
 Se puede volver a inciar los contenedores para observar los cambios realizados para los escenarios
 ```
 sudo docker-compose -f docker-compose.network.yml -f docker-compose.postgres.yml -f docker-compose.redis.yml -f docker-compose.api.yml -f docker-compose.traffic.yml -f docker-compose.grpc-server.yml up --build
 ```
 
-## Cambios a realizar en los archivos
+## - IMPORTANTE - Cambios a realizar en los archivos
 Para realizar cambios y estudiar los casos de los escenarios, es escencial realizar cambios en los siguientes archivos:
 ```bash
 |-api/main.py
@@ -213,13 +210,14 @@ También se implementan políticas de remoción para gestionar el uso de memoria
 
 Escenarios
 
-    Única partición: Ejecuta Redis sin particionamiento.
-    Particionado por hash: Utiliza 2, 4, y 8 particiones.
-    Particionado por rango: Evalúa el comportamiento con diferentes particiones de datos.
+    1-Única partición: Ejecuta Redis sin particionamiento.
+    2-Particionado por hash: Utilizar 2, 4, y 8 particiones.
+    3-Particionado por rango: Utilizar 2, 4 y 8 particiones.
 
 # Conclusión
 
 Este sistema de caché distribuido permite mejorar el rendimiento de las consultas DNS mediante el uso de Redis para almacenar en caché las respuestas más frecuentes y gRPC para la comunicación con un servidor externo cuando las respuestas no están en caché. La arquitectura modular facilita su despliegue y análisis en distintos entornos.
 
-# Vidio
+# Video 
+
 [Demostracion](https://www.youtube.com/watch?v=BMgl2t5ovKs)
